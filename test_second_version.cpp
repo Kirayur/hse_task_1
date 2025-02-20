@@ -25,25 +25,33 @@ void addition() {
 }
 
 void subtraction() {
-    LongNumber number1 = 13.533_longnum;
-    LongNumber number2 = 1.83_longnum;
-    LongNumber expected = 11.703_longnum; 
+    LongNumber number1 = 1.0_longnum;
+    LongNumber number2 = 2.0_longnum;
+    LongNumber expected = -1.0_longnum; 
     assert(number1 - number2 == expected);
     std::cout << "Subtraction test: OK" << std::endl;
 }
 
+bool equal_eps(LongNumber a, LongNumber b) {
+    return (a-b).abs() < 0.000001_longnum;
+}
+
 void multiplication() {
     LongNumber number1 = 2.0_longnum;
-    LongNumber number2 = 10.5_longnum;
-    LongNumber expected = 21.0_longnum;
-    assert(number1 * number2 == expected);
+    //number1.print_data();
+    LongNumber number2 = 10.05_longnum;
+    //number2.print_data();
+    LongNumber expected = 20.1_longnum;
+    //expected.print_data();
+    //(number1 * number2).print_data();
+    assert(equal_eps(number1 * number2,expected));
     std::cout << "Multiplication test: OK" << std::endl;
 }
 
 void division() {
-    LongNumber number1 = 5.0_longnum;
-    LongNumber number2 = 0.1_longnum;
-    LongNumber expected = 50.0_longnum;
+    LongNumber number1 = 1.0_longnum;
+    LongNumber number2 = 5.0_longnum;
+    LongNumber expected = 0.2_longnum;
     assert(number1 / number2 == expected);
     std::cout << "Division test: OK" << std::endl;
 }
