@@ -28,6 +28,7 @@ unsigned LongNumber::divide_up(unsigned a, unsigned b) {
 bool LongNumber::bit(unsigned n) const {
     return (digits[n / 32] & (1 << (n % 32))) != 0;
 }
+
 LongNumber LongNumber::shift_left() {
     bool carry = false;
     LongNumber result = *this;
@@ -46,7 +47,6 @@ LongNumber LongNumber::shift_left() {
 }
 LongNumber LongNumber::shift_right() {
     LongNumber result = *this;
-    bool carry = false;
     for(unsigned i = 0; i < result.digits.size() - 1; ++i) {
         result.digits[i] >>= 1;
         if (result.digits[i+1] & 1) {
@@ -330,7 +330,7 @@ LongNumber LongNumber::operator/(const LongNumber& number) const {
     LongNumber cursor = make_number(1);
     cursor.set_fractional_bits(fractional_bits);
     LongNumber result = LongNumber(fractional_bits);
-    while((cursor.digits.front() & (1<<31)) != 0) {
+    while((cursor.digits.back() & (1ll<<31ll)) == 0 && (oprd2.digits.back() & (1ll<<31ll)) == 0) {
         cursor = cursor.shift_left();
         oprd2 = oprd2.shift_left();
     }
@@ -345,107 +345,6 @@ LongNumber LongNumber::operator/(const LongNumber& number) const {
     return result;
 
 }
-/*
-LongNumber LongNumber::operator*(const LongNumber& number) const {
-    if (fractional_bits != number.fractional_bits) {
-        LongNumber normalizedA = *this;
-        LongNumber normalizedB = number;
-        if (normalizedA.fractional_bits > normalizedB.fractional_bits) {
-            normalizedB.set_fractional_bits(normalizedA.fractional_bits);
-        }
-        else {
-            normalizedA.set_fractional_bits(normalizedB.fractional_bits);
-        }
-        return normalizedA * normalizedB;
-    }
-    LongNumber a = *this;
-    LongNumber b = number;
-
-    unsigned lenA = a.digits.size();
-    unsigned lenB = b.digits.size();
-    for (int i = 0; i < lenA; i++)
-        a.digits.push_back(0);
-    for (int i = 0; i < lenB; i++)
-        b.digits.push_back(0);
-    a.fractional_bits *= 2;
-    b.fractional_bits *= 2;
-
-    LongNumber result(b.fractional_bits);
-    LongNumber current = b;
-    for (unsigned i = 0; i < a.fractional_bits/2 + sizeof(unsigned) * 8; ++i) {
-        if (bit(i)) {
-            result = result % current;
-        }
-        current = current % current;
-    }
-    return result;
-}
-*/
-/*LongNumber LongNumber::operator>>(int shift) const {
-    LongNumber result = *this;
-    for (int i = 0; i < shift; ++i) {
-        unsigned carry = 0;
-        for (int j = digits.size() - 1; j >= 0; --j) {
-            unsigned new_carry = (result.digits[j] & 1) << 31;
-            result.digits[j] = (result.digits[j] >> 1) | carry;
-            carry = new_carry;
-        }
-    }
-    return result;
-}*/
-
-/*LongNumber LongNumber::inverse() const {
-    if (number == 0.0) {
-        throw std::runtime_error("Division by zero");
-    }
-
-    LongNumber x(*this);
-    x.sign = 0;
-    LongNumber d(1.);
-
-    LongNumber result;
-    result.sign = sign;
-    result.exp = 1;
-    result.mant.resize(0);
-
-    while (x < 1.) {
-        ++x.exp;
-        ++result.exp;
-    }
-
-    while (d < x) ++d.exp;
-
-    result.exp -= d.exp - 1;
-
-    size_t numbers = 0;
-    size_t intPart = std::max(0, result.exp);
-    size_t maxNumbers = prec * k_mant + intPart;
-    do {
-        bool div = 0;
-
-        if (d >= x) {
-            div = 1;
-            d -= x;
-        }
-
-        ++d.exp;
-
-        result.mant.push_back(div);
-        ++numbers;
-    } while (!d.isZero() && numbers < maxNumbers);
-
-    return res;
-}*/
-
 LongNumber operator ""_longnum(long double number) {
     return LongNumber::make_number(number);
 }
-
-/*int main() {
-    LongNumber x = 2.0_longnum;
-    LongNumber y = 2.5_longnum;
-    LongNumber z = 5.0_longnum;
-    LongNumber res = x * y;
-    std::cout << ((res == z) ? 1 : 0);
-    return 0;
-}*/

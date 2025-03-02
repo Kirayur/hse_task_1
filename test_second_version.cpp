@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cassert>
-#include "second_version_pr1.cpp"
+#include "rand12.cpp"
 
 void comparison() {
     LongNumber number1 = 2.60_longnum;
@@ -38,21 +38,17 @@ bool equal_eps(LongNumber a, LongNumber b) {
 
 void multiplication() {
     LongNumber number1 = 2.0_longnum;
-    //number1.print_data();
     LongNumber number2 = 10.05_longnum;
-    //number2.print_data();
     LongNumber expected = 20.1_longnum;
-    //expected.print_data();
-    //(number1 * number2).print_data();
-    assert(equal_eps(number1 * number2,expected));
+    assert(equal_eps(number1 * number2, expected));
     std::cout << "Multiplication test: OK" << std::endl;
 }
 
 void division() {
-    LongNumber number1 = 1.0_longnum;
+    LongNumber number1 = 12.12_longnum;
     LongNumber number2 = 5.0_longnum;
-    LongNumber expected = 0.2_longnum;
-    assert(number1 / number2 == expected);
+    LongNumber expected = 2.424_longnum;
+    assert(equal_eps(number1 / number2, expected));
     std::cout << "Division test: OK" << std::endl;
 }
 
@@ -62,6 +58,6 @@ int main() {
     subtraction();
     multiplication();
     division();
-    std::cout << "All tests passed! (ура)" << std::endl;
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }

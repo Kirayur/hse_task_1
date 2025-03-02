@@ -2,16 +2,12 @@
 #define LONGNUMBER_HPP
 
 #include <vector>
+#include <string>
 #include <algorithm>
 #include <iostream>
 
-
 class LongNumber {
 private:
-
-    std::vector<unsigned> digits;
-    unsigned fractional_bits;
-    bool sign = false;
     static void explode(int a);
     static unsigned divide_up(unsigned a, unsigned b);
     bool bit(unsigned n) const;
@@ -23,11 +19,18 @@ private:
     bool is_zero() const;
 
 public:
+    std::vector<unsigned> digits;
+    unsigned fractional_bits;
+    bool sign = false;
+    int negative() const;
+    std::string to_string(unsigned fp_digits) const;
     void print_data();
     static LongNumber make_number(long double number);
+    //static LongNumber make_number_int(long double number);
     LongNumber();
     LongNumber(unsigned fractional_bits);
     LongNumber(const LongNumber& number);
+    //long long to_int_intpart();
     
     void set_fractional_bits(unsigned b);
     LongNumber& operator=(const LongNumber& number);
